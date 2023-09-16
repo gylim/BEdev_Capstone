@@ -80,10 +80,6 @@ WSGI_APPLICATION = 'littlelemon.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'TEST': {
-          'USER': 'admindjango',
-          'PASSWORD': 'project@123!',
-        },
         'OPTIONS': {
             'read_default_file': 'littlelemon/mysql/my.cnf',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

@@ -33,3 +33,15 @@ class BookingTest(TestCase):
     item = Booking.objects.get(Name="Luffy")
     self.assertEqual(item.No_of_guests, 5)
     self.assertEqual(item.BookingDate, datetime(2023, 9, 20, 13, tzinfo=ZoneInfo('Asia/Singapore')))
+
+  def test_change_item(self):
+    item = Booking.objects.get(Name="Luffy")
+    item.No_of_guests = 3
+    item.save(update_fields=['No_of_guests'])
+    updated = Booking.objects.get(Name='Luffy')
+    self.assertEqual(updated.No_of_guests, 3)
+
+  def test_delete_item(self):
+    first = Booking.objects.get()
+    first.delete()
+    self.assertEqual(Booking.objects.count(), 0)
