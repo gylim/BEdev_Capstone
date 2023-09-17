@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+  <article>
+    <h1>Make a reservation</h1>
+    <!--Begin row-->
+    <div class="row">
+      <!--Begin col-->
+      <div class="column">
+          {% csrf_token %}
+          <form method="POST" id="form">
+            <!-- {% csrf_token %} -->
+            <p>
+              <label for="first_name">Name:</label>
+              <input type="text" placeholder="Your Name" maxlength="200" required="" id="first_name">
+            </p>
+            <p>
+              <label for="reservation_datetime">Reservation Date & Time:</label>
+              <input type="datetime-local" placeholder="today" required="" id="reservation_datetime">
+            </p>
+
+            <p>
+              <label for="guest_number">No of Guests:</label>
+              <input type="number" id="guest_number" placeholder="Enter number >0" required="">
+            </p>
+            <button type="button" id="button">Reserve</button>
+          </form>
+      </div>
+      <!--End col-->
+
+      <!--Begin col-->
+      <div class="column">
+        <h2>Bookings For <span id="today"></span></h2>
+        <div id="bookings">
+        </div>
+      </div>
+      <!--End col-->
+    </div>
+    <!--End row-->
+
+
+
+
+  </article>
+</section>
+<script>
+  const date = new Date()
+  document.getElementById('reservation_datetime').value = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}T${date.getHours()}:${date.getMinutes()}`
+
+  console.log(document.getElementById('reservation_datetime').value)
+  getBookings()
+
+  document.getElementById('reservation_datetime').addEventListener('change', function (e) {
+    getBookings()
+  })
+
+  function getBookings() {
+    const day = document.getElementById('reservation_datetime').value.split('T')[0]
+    document.getElementById('today').innerHTML = day
+
+    fetch("{% url 'bookings' %}" + '?date=' + day)
+      .then(r => r.json())
+      .then(data => {
+        console.log(data)
+        bookings = ''
+
+        for (item of data) {
+          bookings += `<p>${item.fields.Name} - ${formatTime(item.fields.BookingDate)}</p>`
+        }
+
+        if(bookings==''){
+          bookings = "No bookings"
+        }
+        document.getElementById('bookings').innerHTML = bookings
+      })
+  }
+
+  function formatTime(time) {
+    const [a, b, c] = time.split("T")[1].split(":")
+    const ampm = a < 12 ? 'AM' : 'PM'
+    const t = a < 12 ? a : a > 12 ? a - 12 : a
+    const label = `${t}:${b} ${ampm}`
+    return label
+  }
+
+
+  document.getElementById('button').addEventListener('click', function (e) {
+    const formdata = {
+      Name: document.getElementById('first_name').value,
+      No_of_guests: document.getElementById('guest_number').value,
+      BookingDate: document.getElementById('reservation_datetime').value,
+    }
+
+    fetch("{% url 'bookings' %}", { method: 'post', body: JSON.stringify(formdata) })
+      .then(r => r.text())
+      .then(data => {
+        getBookings()
+      })
+  })
+</script>
+{% endblock %}

@@ -38,29 +38,38 @@ DATABASES = {
 
 ### Testing
 
-8. Run `python littlelemon/manage.py runserver` to test the API endpoints and sites in your browser
+8. Run `python littlelemon/manage.py runserver` to test the API endpoints and sites in your browser the root url is [http://localhost:8000]
 9. Run `python littlelemon/manage.py test littlelemon/tests` to run the unit tests
 10. Once testing is complete, run `exit` to terminate the virtual environment shell
 
-## List of basic endpoints/routes
+## List of endpoints/routes
 
-Endpoint                      | Type | Description
------------------------------ | ---- | -----------
-`/admin/`                     | Site | For website administration
-`/restaurant/`                | Site | Home page of website
-`/auth/users/`                | API  | From Djoser: user registration
-`/auth/users/me/`             | API  | From Djoser: retrieve/update current user
-`/auth/token/login`           | API  | From Djoser: get bearer token
-`/restaurant/api-token-auth`  | API  | Alternative to get bearer token
-`/auth/token/logout`          | API  | From Djoser: destroy bearer token
-`/restaurant/booking/tables`  | API  | View existing bookings, add/delete existing bookings (authentication required - must be a registered user to book a table)
-`/restaurant/menu/`           | API  | View entire menu, add menu item (must be staff user to add menu item)
-`/restaurant/menu/<int:pk>`   | API  | Retrieve, update/delete menu item (must be staff user to update or delete menu item)
+Endpoint                       | Type | Description
+------------------------------ | ---- | -----------
+`/admin/`                      | Site | For website administration
+`/restaurant/`                 | Site | Home page of website
+`/restaurant/about/`           | Site | About page of website
+`/restaurant/menu/`            | Site | Menu page of website
+`/restaurant/menu/<int:pk>`    | Site | See more details of particular menu item
+`/restaurant/book/`            | Site | Form page to make a booking
+`/restaurant/bookings/`        | API  | For querying and saving bookings to/from DB
+`/restaurant/reservations/`    | Site | View all existing reservations in a table
+`/auth/users/`                 | API  | From Djoser: user registration
+`/auth/users/me/`              | API  | From Djoser: retrieve/update current user
+`/auth/token/login`            | API  | From Djoser: get bearer token
+`/restaurant/api-token-auth`   | API  | Alternative to get bearer token
+`/auth/token/logout`           | API  | From Djoser: destroy bearer token
+`/restaurant/booking/tables`   | API  | View existing bookings, add/delete existing bookings (authentication required - must be a registered user to book a table)
+`/restaurant/api-menu/`        | API  | View entire menu, add menu item (must be staff user to add menu item)
+`/restaurant/api-menu/<int:pk>`| API  | Retrieve, update/delete menu item (must be staff user to update or delete menu item)
 
 ## Improvements/changes made to basic specifications
 - Database settings (username & password) stored in `littlelemon/mysql/my.cnf` file for better security
+- Used `IsAuthenticatedOrReadOnly` permission class for `BookingViewSet` so that anyone can see bookings, but only registered users can add/change bookings
 - Implemented validation of staff permission on `/restaurant/menu/` endpoints for operations that modify database
+- Added more webpages to make the site complete
 
 ## Ways to further improve this project
-- Modify the booking API and model so that only the user who created the booking can delete the booking
-- Modify the booking API so that only the user's own
+- Modify the booking API and model so that only the user who created the booking can delete or change the booking
+- Modify the booking API so that only the user's own bookin
+- Add sign-in for webpage-based bookings

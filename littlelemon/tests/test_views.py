@@ -17,7 +17,7 @@ class MenuViewTest(TestCase):
     Menu.objects.create(Title="Pie", Price=4.60, Inventory=34)
 
   def test_get_all(self):
-    request = self.factory.get('menu/')
+    request = self.factory.get('api-menu/')
     response = MenuItemsView.as_view()(request)
     self.assertEqual(response.status_code, 200)
     self.assertEqual(len(response.data), 2)
@@ -25,7 +25,7 @@ class MenuViewTest(TestCase):
     self.assertEqual(response.data[1]['Title'], "Pie")
 
   def test_add_one(self):
-    request = self.factory.post('menu/', {'Title': 'Cheese', 'Price': 3.8, 'Inventory': 15}, format='json')
+    request = self.factory.post('api-menu/', {'Title': 'Cheese', 'Price': 3.8, 'Inventory': 15}, format='json')
 
     # test that anonymous user cannot add menu item
     force_authenticate(request, user=AnonymousUser())
@@ -42,7 +42,7 @@ class MenuViewTest(TestCase):
 
   def test_del_one(self):
     pk = Menu.objects.get(Title="Ice Cream").id
-    request = self.factory.delete('menu/')
+    request = self.factory.delete('api-menu/')
 
     # test that anonymous user cannot delete menu item
     force_authenticate(request, user=AnonymousUser())
@@ -58,7 +58,7 @@ class MenuViewTest(TestCase):
 
   def test_put_one(self):
     pk = Menu.objects.get(Title="Ice Cream").id
-    request = self.factory.put('/menu', {'Title': 'Fries', 'Price': 4.4, 'Inventory': 21})
+    request = self.factory.put('api-menu/', {'Title': 'Fries', 'Price': 4.4, 'Inventory': 21})
 
     # test that anonymous user cannot put menu item
     force_authenticate(request, user=AnonymousUser())
@@ -74,7 +74,7 @@ class MenuViewTest(TestCase):
 
   def test_patch_one(self):
     pk = Menu.objects.get(Title="Ice Cream").id
-    request = self.factory.patch('/menu', {'Inventory': 21})
+    request = self.factory.patch('api-menu/', {'Inventory': 21})
 
     # test that anonymous user cannot patch menu item
     force_authenticate(request, user=AnonymousUser())
