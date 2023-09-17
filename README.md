@@ -39,8 +39,10 @@ DATABASES = {
 ### Testing
 
 8. Run `python littlelemon/manage.py runserver` to test the API endpoints and sites in your browser the root url is [http://localhost:8000]
-9. Run `python littlelemon/manage.py test littlelemon/tests` to run the unit tests
-10. Once testing is complete, run `exit` to terminate the virtual environment shell
+9. To test APIs requiring authentication, use the `/auth/users/` endpoint to register a new user and get an api token from `/auth/token/login`
+    * To test API functions requiring staff permissions, either register a superuser with `python littlelemon/manage.py createsuperuser` or go to the admin site [http://localhost:8000/admin/] and grant an existing user with staff permissions by setting `is_staff` to `True`.
+10. Run `python littlelemon/manage.py test littlelemon/tests` to run the unit tests
+11. Once testing is complete, run `exit` to terminate the virtual environment shell
 
 ## List of endpoints/routes
 
